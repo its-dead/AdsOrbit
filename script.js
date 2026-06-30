@@ -1,10 +1,14 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav');
 
-if (toggle) {
-    toggle.addEventListener('click', () => nav.classList.toggle('open'));
+// Mobile menu toggle
+if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+        nav.classList.toggle('open');
+    });
 }
 
+// Reveal animations
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -15,9 +19,39 @@ const observer = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Remove the hash from the URL after navigating to a section
-window.addEventListener('hashchange', () => {
-    setTimeout(() => {
-        history.replaceState(null, '', window.location.pathname);
-    }, 50);
+// Smooth scroll WITHOUT hash in URL
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+        const targetId = link.getAttribute('href');
+        const target = document.querySelector(targetId);
+
+        if (!target) return;
+
+        e.preventDefault();
+
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+
+        // close mobile nav after click (optional but good UX)
+        nav?.classList.remove('open');
+    });
+});
+
+// Handle direct access like /#work then remove hash cleanly
+window.addEventListener('DOMContentLoaded', () => {
+    if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+
+        if (target) {
+            target.scrollIntoView({ behavior: 'auto' });
+        }
+
+        history.replaceState(
+            null,
+            '',
+            window.location.pathname + window.location.search
+        );
+    }
 });
