@@ -51,7 +51,7 @@ a{color:inherit}
     font-size:.95rem
 }
 
-.menu-toggle{display:none}
+.menu-toggle{display:none; cursor:pointer; font:inherit}
 
 .section-pad{padding:86px 5vw}
 
