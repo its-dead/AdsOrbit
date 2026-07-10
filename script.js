@@ -3,8 +3,20 @@ const nav = document.querySelector('.nav');
 
 // Mobile menu toggle
 if (toggle && nav) {
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         nav.classList.toggle('open');
+        toggle.classList.toggle('active');
+    });
+}
+
+// Close menu when clicking outside
+if (nav) {
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+            nav.classList.remove('open');
+            toggle.classList.remove('active');
+        }
     });
 }
 

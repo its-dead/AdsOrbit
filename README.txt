@@ -1,7 +1,8 @@
 AdsOrbit Portfolio Pro Template
 
 Open index.html to view the homepage.
-Project cards link to pages inside /projects/.
+Project cards link to pages in related folders.
+
 
 To add real visuals:
 1. Put images/videos in an assets folder.
