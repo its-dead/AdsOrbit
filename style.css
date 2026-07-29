@@ -8,8 +8,8 @@
   --violet: #9b7de8;
   --violet-bright: #b99ef0;
   --lav: #2a2050;
-  --deep: #060810;
-  --soft: #131830;
+  --deep: #0a0610;
+  --soft: #1e1330;
   --logo: #b99ef0;
   --accent: #7c5cbf;
     --radius:28px
@@ -25,21 +25,29 @@ body {
   background: var(--bg);
   color: var(--ink);
   overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
 }
 
 a{color:inherit}
 
 .site-header{
+    position:-webkit-sticky;
     position:sticky;
     top:0;
-    z-index:20;
+    left:0;
+    right:0;
+    z-index:50;
+    will-change: transform;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    width:100%;
     padding:18px 5vw;
     background:var(--lav);
     backdrop-filter:blur(18px);
-    border-bottom:1px solid var(--line)
+    border-bottom:1px solid var(--line);
+    box-shadow:0 8px 24px rgba(0,0,0,.18)
 }
 
 .brand{
@@ -237,20 +245,54 @@ a{color:inherit}
 
 .process-line{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .process-line div{border:1px solid rgba(255,255,255,.16);border-radius:22px;padding:22px}
-.process-line p{color:#d8cfe4}.split{display:grid;grid-template-columns:1.2fr .8fr;gap:40px}
-.contact{text-align:center;background:linear-gradient(135deg,#efe8f8,#fff)}
+.process-line p{color:#d8cfe4}
+.split{display:grid;grid-template-columns:1.2fr .8fr;gap:40px}
+.contact{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:linear-gradient(135deg,var(--lav),var(--soft))
+}
+.contact > * {max-width:720px}
+.contact .btn{margin:12px auto 0}
 footer{padding:34px 5vw;color:var(--muted)}
-.reveal{opacity:0;transform:translateY(22px);transition:.7s ease}
+main, footer {
+  position: relative;
+  z-index: 1;
+}
+.reveal{
+  opacity: 1;
+  transform: none;
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal:not(.visible){
+  opacity:0;
+  transform:translateY(22px);
+}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 #starfield {
   position: fixed;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
 }
+
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--lav); border-radius: 3px; }
+
 
 @media(max-width:820px){
     .menu-toggle{
