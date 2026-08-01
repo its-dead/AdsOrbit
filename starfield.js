@@ -30,18 +30,19 @@ function drawWispyBlob(nc, cx, cy, rx, ry, angle, color, layers) {
     const offX = (Math.random() - 0.5) * rx * 0.5;
     const offY = (Math.random() - 0.5) * ry * 0.6;
     const alpha = (1 - t) * 0.12 + 0.03;
+    const pad = Math.max(rx, ry) * 0.35;
 
     nc.save();
     nc.translate(cx + offX, cy + offY);
     nc.rotate(angle + (Math.random() - 0.5) * 0.4);
-    const g = nc.createRadialGradient(0, 0, 0, 0, 0, Math.max(scaleX, scaleY));
+    const g = nc.createRadialGradient(0, 0, 0, 0, 0, Math.max(scaleX, scaleY) + pad);
     g.addColorStop(0, color.replace('A', alpha.toFixed(2)));
     g.addColorStop(0.5, color.replace('A', (alpha * 0.4).toFixed(2)));
     g.addColorStop(1, 'transparent');
     nc.fillStyle = g;
     nc.scale(scaleX / Math.max(scaleX, scaleY), scaleY / Math.max(scaleX, scaleY));
     nc.beginPath();
-    nc.arc(0, 0, Math.max(scaleX, scaleY), 0, Math.PI * 2);
+    nc.arc(0, 0, Math.max(scaleX, scaleY) + pad, 0, Math.PI * 2);
     nc.fill();
     nc.restore();
   }
@@ -85,30 +86,31 @@ function createNebulaLayer({
 function buildNebulaA(nc, w, h) {
   const bandY = h * 0.26;
   const slope = -0.06;
+  const spreadX = w * 0.18;
 
   // deep crimson base
   for (let i = 0; i < 6; i++) {
-    const bx = w * (0.06 + i * 0.18);
+    const bx = w * (0.06 + i * 0.18) - spreadX;
     const by = bandY + bx * slope + (Math.random() - 0.5) * h * 0.04;
-    drawWispyBlob(nc, bx, by, w * 0.30, h * 0.10, -0.14, 'rgba(110,18,48,A)', 14);
+    drawWispyBlob(nc, bx, by, w * 0.36, h * 0.12, -0.14, 'rgba(110,18,48,A)', 14);
   }
   // dark rose spine
   for (let i = 0; i < 7; i++) {
-    const bx = w * (0.03 + i * 0.15);
+    const bx = w * (0.03 + i * 0.15) - spreadX * 0.6;
     const by = bandY + bx * slope + (Math.random() - 0.5) * h * 0.025;
-    drawWispyBlob(nc, bx, by, w * 0.17, h * 0.05, -0.09, 'rgba(140,30,68,A)', 16);
+    drawWispyBlob(nc, bx, by, w * 0.20, h * 0.06, -0.09, 'rgba(140,30,68,A)', 16);
   }
   // deep indigo-blue drifts
   for (let i = 0; i < 5; i++) {
-    const bx = w * Math.random();
+    const bx = w * Math.random() - spreadX * 0.25;
     const by = bandY + bx * slope + (Math.random() - 0.5) * h * 0.10;
-    drawWispyBlob(nc, bx, by, w * 0.15, h * 0.06, 0.05, 'rgba(35,60,130,A)', 12);
+    drawWispyBlob(nc, bx, by, w * 0.18, h * 0.07, 0.05, 'rgba(35,60,130,A)', 12);
   }
   // faint teal accents
   for (const px of [0.2, 0.5, 0.82]) {
-    const bx = w * px;
+    const bx = w * px - spreadX * 0.15;
     const by = bandY + bx * slope + h * 0.02;
-    drawWispyBlob(nc, bx, by, w * 0.08, h * 0.03, 0.1, 'rgba(20,85,105,A)', 10);
+    drawWispyBlob(nc, bx, by, w * 0.10, h * 0.04, 0.1, 'rgba(20,85,105,A)', 10);
   }
 }
 
@@ -118,49 +120,50 @@ function buildNebulaA(nc, w, h) {
 function buildNebulaB(nc, w, h) {
   const bandY = h * 0.40;
   const slope = -0.12;
+  const spreadX = w * 0.16;
 
   // deep crimson underlayer
   for (let i = 0; i < 6; i++) {
-    const bx = w * (0.05 + i * 0.18);
+    const bx = w * (0.05 + i * 0.18) - spreadX;
     const by = bandY + bx * slope + (Math.random() - 0.5) * h * 0.04;
-    drawWispyBlob(nc, bx, by, w * 0.28, h * 0.09, -0.15, 'rgba(160,20,60,A)', 14);
+    drawWispyBlob(nc, bx, by, w * 0.34, h * 0.11, -0.15, 'rgba(160,20,60,A)', 14);
   }
   // hot pink ridge
   for (let i = 0; i < 8; i++) {
-    const bx = w * (0.02 + i * 0.14);
+    const bx = w * (0.02 + i * 0.14) - spreadX * 0.7;
     const by = bandY + bx * slope + (Math.random() - 0.5) * h * 0.025;
-    drawWispyBlob(nc, bx, by, w * 0.16, h * 0.045, -0.1, 'rgba(240,50,110,A)', 18);
+    drawWispyBlob(nc, bx, by, w * 0.20, h * 0.055, -0.1, 'rgba(240,50,110,A)', 18);
   }
   // rose highlights
   for (const px of [0.08, 0.25, 0.44, 0.6, 0.78, 0.93]) {
-    const bx = w * px;
+    const bx = w * px - spreadX * 0.4;
     const by = bandY + bx * slope - h * (0.01 + Math.random() * 0.02);
-    drawWispyBlob(nc, bx, by, w * 0.09, h * 0.03, -0.08, 'rgba(255,95,140,A)', 20);
+    drawWispyBlob(nc, bx, by, w * 0.11, h * 0.035, -0.08, 'rgba(255,95,140,A)', 20);
   }
   // coral hot spots (new warm hue in the same palette)
   for (const px of [0.15, 0.52, 0.86]) {
-    const bx = w * px;
+    const bx = w * px - spreadX * 0.2;
     const by = bandY + bx * slope - h * 0.005;
-    drawWispyBlob(nc, bx, by, w * 0.07, h * 0.025, -0.05, 'rgba(255,120,85,A)', 16);
+    drawWispyBlob(nc, bx, by, w * 0.09, h * 0.03, -0.05, 'rgba(255,120,85,A)', 16);
   }
   // soft magenta outskirts
   for (let i = 0; i < 10; i++) {
-    const bx = w * Math.random();
+    const bx = w * Math.random() - spreadX * 0.2;
     const spread = (Math.random() - 0.5);
     const by = bandY + bx * slope + spread * h * 0.08;
-    drawWispyBlob(nc, bx, by, w * 0.14, h * 0.055, -0.05 + Math.random() * 0.1, 'rgba(200,40,90,A)', 10);
+    drawWispyBlob(nc, bx, by, w * 0.16, h * 0.065, -0.05 + Math.random() * 0.1, 'rgba(200,40,90,A)', 10);
   }
   // bright blue clusters
   for (const bpx of [0.35, 0.62]) {
-    const bx = w * bpx;
+    const bx = w * bpx - spreadX * 0.1;
     const by = bandY + bx * slope + h * 0.015;
-    drawWispyBlob(nc, bx, by, w * 0.07, h * 0.025, 0.1, 'rgba(120,165,255,A)', 12);
+    drawWispyBlob(nc, bx, by, w * 0.09, h * 0.03, 0.1, 'rgba(120,165,255,A)', 12);
   }
   // cyan accents (new cool hue in the same palette)
   for (const px of [0.22, 0.7]) {
-    const bx = w * px;
+    const bx = w * px - spreadX * 0.15;
     const by = bandY + bx * slope + h * 0.025;
-    drawWispyBlob(nc, bx, by, w * 0.06, h * 0.022, 0.08, 'rgba(90,205,225,A)', 12);
+    drawWispyBlob(nc, bx, by, w * 0.08, h * 0.028, 0.08, 'rgba(90,205,225,A)', 12);
   }
 }
 
@@ -195,10 +198,15 @@ function resize() {
   canvas.height = VH;
 
   for (const layer of layers) {
-    layer.canvas.width = W;
-    layer.canvas.height = DOC_H;
-    layer.ctx.clearRect(0, 0, W, DOC_H);
-    layer.build(layer.ctx, W, DOC_H);
+    const EXTRA = W * 0.5; // 50% padding on each side
+
+  layer.canvas.width = W + EXTRA * 2;
+  layer.canvas.height = DOC_H;
+
+  layer.ctx.clearRect(0, 0, layer.canvas.width, DOC_H);
+
+  // Build using the larger canvas
+  layer.build(layer.ctx, layer.canvas.width, DOC_H);
   }
 
   buildStars();
@@ -238,7 +246,8 @@ function frame(now) {
     ctx.translate(W / 2, VH / 2);
     ctx.scale(breath, breath);
     ctx.translate(-W / 2 + driftX, -VH / 2);
-    ctx.drawImage(layer.canvas, 0, drawY);
+    const offsetX = -(layer.canvas.width - W) / 2;
+    ctx.drawImage(layer.canvas, offsetX, drawY);
     ctx.restore();
   }
 
